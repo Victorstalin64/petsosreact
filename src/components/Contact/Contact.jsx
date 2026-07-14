@@ -36,8 +36,9 @@ function Contact() {
         <div className="contact__map">
 
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7914484515727!2d-78.4919116242656!3d-0.2102860353982151"
-            title="mapa"
+           src="https://www.google.com/maps?q=Escuela%20Politécnica%20Nacional%20Quito%20Ecuador&output=embed"
+           title="Mapa PetSOS"
+           loading="lazy"
           ></iframe>
 
         </div>

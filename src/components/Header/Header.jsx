@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="header">
+    <motion.header
+      className={`header ${scrolled ? "header--scrolled" : ""}`}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="container header__container">
 
         <h1 className="navbar__logo">
@@ -11,22 +27,27 @@ function Header() {
 
         <nav className="nav">
           <ul className="nav__menu">
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#nosotros">Nosotros</a></li>
-            <li><a href="#servicios">Servicios</a></li>
-            <li><a href="#app">App</a></li>
-            <li><a href="#galeria">Galería</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/#nosotros">Nosotros</Link></li>
+            <li><Link to="/servicios">Servicios</Link></li>
+            <li><Link to="/#app">App</Link></li>
+            <li><Link to="/#galeria">Galería</Link></li>
+            <li><Link to="/#contacto">Contacto</Link></li>
             <li>
-              <a href="#" className="nav__login">
-                Acceso
-              </a>
+              <motion.div
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Link to="/login" className="nav__login">
+                  Acceso
+                </Link>
+              </motion.div>
             </li>
           </ul>
         </nav>
 
       </div>
-    </header>
+    </motion.header>
   );
 }
 
