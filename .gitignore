@@ -21,7 +21,6 @@ firebase-debug.log
 firebase-debug.*.log
 *-debug.log
 .firebaserc
-firebase.js
 
 # Logs
 logs/
@@ -84,3 +83,6 @@ $RECYCLE.BIN/
 *.key
 *.cert
 *.crt
+
+# Local Netlify folder
+.netlify
