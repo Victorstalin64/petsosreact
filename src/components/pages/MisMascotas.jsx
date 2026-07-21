@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   LuPawPrint, LuPlus, LuTrash2, 
-  LuHeart, LuCalendar, LuX 
+  LuHeart, LuCalendar, LuX, LuFileDown
 } from "react-icons/lu";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { MascotaPDF } from "./PdfDocuments";
 import { obtenerMisMascotas, eliminarMascota } from "../../services/petService";
 import { auth } from "../../firebase";
 import "./Pages.css";
@@ -247,6 +249,13 @@ function MisMascotas() {
               </div>
 
               <div className="modal-footer">
+                <PDFDownloadLink
+                  document={<MascotaPDF mascota={mascotaSeleccionada} />}
+                  fileName={`ficha-${mascotaSeleccionada.nombre || "mascota"}.pdf`}
+                  className="pdf-button"
+                >
+                  <LuFileDown /> Descargar Ficha
+                </PDFDownloadLink>
                 <button 
                   className="button button--danger"
                   onClick={() => handleEliminar(mascotaSeleccionada.id)}

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LuPawPrint, LuSave, LuCircleAlert } from "react-icons/lu";
+import { LuPawPrint, LuSave, LuCircleAlert, LuImage } from "react-icons/lu";
 import { registrarMascota } from "../../services/petService";
+import { subirImagen } from "../../services/storageService";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Hamster", "Otro"];
@@ -13,6 +14,8 @@ function RegistrarMascota() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [exito, setExito] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
   
   const [form, setForm] = useState({
     nombre: "",
@@ -37,6 +40,36 @@ function RegistrarMascota() {
       ...prev,
       [name]: type === "checkbox" ? checked : value
     }));
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Solo se permiten archivos de imagen.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("La imagen no debe superar 5MB.");
+      return;
+    }
+
+    setError("");
+    setUploading(true);
+    const localPreview = URL.createObjectURL(file);
+    setPreviewUrl(localPreview);
+
+    try {
+      const url = await subirImagen(file, "mascotas");
+      setForm(prev => ({ ...prev, fotoUrl: url }));
+    } catch (err) {
+      console.error("Error al subir imagen:", err);
+      setError("Error al subir la imagen. Puedes intentar de nuevo o usar una URL.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -219,13 +252,44 @@ function RegistrarMascota() {
           </div>
 
           <div className="form-group">
-            <label>URL de Foto (opcional)</label>
+            <label>Foto de la Mascota</label>
+            <div className="file-upload-area">
+              <input
+                type="file"
+                id="foto-mascota"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-upload-input"
+              />
+              <label htmlFor="foto-mascota" className="file-upload-label">
+                {uploading ? (
+                  <span className="file-upload-text">Subiendo imagen...</span>
+                ) : (
+                  <>
+                    <LuImage className="file-upload-icon" />
+                    <span className="file-upload-text">
+                      {form.fotoUrl ? "Cambiar imagen" : "Seleccionar imagen"}
+                    </span>
+                    <span className="file-upload-hint">JPG, PNG o WebP (máx. 5MB)</span>
+                  </>
+                )}
+              </label>
+              {previewUrl && (
+                <div className="file-upload-preview">
+                  <img src={previewUrl} alt="Vista previa" />
+                </div>
+              )}
+            </div>
+            {form.fotoUrl && !uploading && (
+              <p className="file-upload-success">✓ Imagen subida correctamente</p>
+            )}
             <input
               type="url"
               name="fotoUrl"
               value={form.fotoUrl}
               onChange={handleChange}
-              placeholder="https://ejemplo.com/foto.jpg"
+              placeholder="O ingresa una URL de imagen"
+              className="url-input-alt"
             />
           </div>
 
@@ -247,9 +311,9 @@ function RegistrarMascota() {
             </div>
           )}
 
-          <button type="submit" className="button page-button" disabled={loading}>
+          <button type="submit" className="button page-button" disabled={loading || uploading}>
             <LuSave />
-            {loading ? "Registrando..." : "Registrar Mascota"}
+            {loading ? "Registrando..." : uploading ? "Subiendo foto..." : "Registrar Mascota"}
           </button>
         </form>
       </div>

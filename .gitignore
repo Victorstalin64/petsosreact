@@ -2,6 +2,7 @@
 node_modules/
 .pnp
 .pnp.js
+package-lock.json
 
 # Build output
 dist/
@@ -21,6 +22,7 @@ firebase-debug.log
 firebase-debug.*.log
 *-debug.log
 .firebaserc
+.firebase/
 
 # Logs
 logs/
@@ -30,7 +32,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-.vercel/
 
 # Testing
 coverage/
@@ -86,3 +87,9 @@ $RECYCLE.BIN/
 
 # Local Netlify folder
 .netlify
+
+# PWA generated files (se regeneran con npm run build)
+sw.js
+workbox-*.js
+registerSW.js
+manifest.webmanifest

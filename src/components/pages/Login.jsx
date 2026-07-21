@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../../firebase";
+import { FcGoogle } from "react-icons/fc";
 import "./Auth.css";
 
 function Login() {
@@ -20,6 +21,21 @@ function Login() {
       navigate("/");
     } catch (err) {
       setError(traducirError(err.code));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (err) {
+      if (err.code !== "auth/popup-closed-by-user") {
+        setError("Error al iniciar sesión con Google. Intenta de nuevo.");
+      }
     } finally {
       setLoading(false);
     }
@@ -50,6 +66,21 @@ function Login() {
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>o continúa con</span>
+        </div>
+
+        <button
+          type="button"
+          className="auth-social-button"
+          onClick={handleGoogleLogin}
+          disabled={loading}
+        >
+          <FcGoogle className="auth-social-icon" />
+          Google
+        </button>
+
         <p className="auth-switch">
           ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
         </p>

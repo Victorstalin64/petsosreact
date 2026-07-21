@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LuMapPin, LuSave, LuCircleAlert, LuSearch } from "react-icons/lu";
+import { LuMapPin, LuSave, LuCircleAlert, LuSearch, LuImage } from "react-icons/lu";
 import { reportarAnimalEncontrado } from "../../services/foundAnimalService";
 import { auth } from "../../firebase";
+import { subirImagen } from "../../services/storageService";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Otro"];
@@ -14,6 +15,8 @@ function ReportarAnimal() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [exito, setExito] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
   
   const [form, setForm] = useState({
     especie: "Perro",
@@ -34,6 +37,36 @@ function ReportarAnimal() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Solo se permiten archivos de imagen.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("La imagen no debe superar 5MB.");
+      return;
+    }
+
+    setError("");
+    setUploading(true);
+    const localPreview = URL.createObjectURL(file);
+    setPreviewUrl(localPreview);
+
+    try {
+      const url = await subirImagen(file, "reportes-animales");
+      setForm(prev => ({ ...prev, fotoUrl: url }));
+    } catch (err) {
+      console.error("Error al subir imagen:", err);
+      setError("Error al subir la imagen. Puedes intentar de nuevo o usar una URL.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -149,13 +182,44 @@ function ReportarAnimal() {
             </div>
 
             <div className="form-group">
-              <label>URL de Foto (opcional)</label>
+              <label>Foto del Animal</label>
+              <div className="file-upload-area">
+                <input
+                  type="file"
+                  id="foto-animal"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="file-upload-input"
+                />
+                <label htmlFor="foto-animal" className="file-upload-label">
+                  {uploading ? (
+                    <span className="file-upload-text">Subiendo imagen...</span>
+                  ) : (
+                    <>
+                      <LuImage className="file-upload-icon" />
+                      <span className="file-upload-text">
+                        {form.fotoUrl ? "Cambiar imagen" : "Seleccionar imagen"}
+                      </span>
+                      <span className="file-upload-hint">JPG, PNG o WebP (máx. 5MB)</span>
+                    </>
+                  )}
+                </label>
+                {previewUrl && (
+                  <div className="file-upload-preview">
+                    <img src={previewUrl} alt="Vista previa" />
+                  </div>
+                )}
+              </div>
+              {form.fotoUrl && !uploading && (
+                <p className="file-upload-success">✓ Imagen subida correctamente</p>
+              )}
               <input
                 type="url"
                 name="fotoUrl"
                 value={form.fotoUrl}
                 onChange={handleChange}
-                placeholder="https://ejemplo.com/foto.jpg"
+                placeholder="O ingresa una URL de imagen"
+                className="url-input-alt"
               />
             </div>
           </div>
@@ -266,9 +330,9 @@ function ReportarAnimal() {
             </div>
           )}
 
-          <button type="submit" className="button page-button page-button--blue" disabled={loading}>
+          <button type="submit" className="button page-button page-button--blue" disabled={loading || uploading}>
             <LuSave />
-            {loading ? "Enviando..." : "Enviar Reporte"}
+            {loading ? "Enviando..." : uploading ? "Subiendo foto..." : "Enviar Reporte"}
           </button>
         </form>
       </div>

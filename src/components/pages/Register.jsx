@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../../firebase";
+import { FcGoogle } from "react-icons/fc";
 import "./Auth.css";
 
 function Register() {
@@ -29,6 +30,21 @@ function Register() {
       navigate("/");
     } catch (err) {
       setError(traducirError(err.code));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleRegister = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (err) {
+      if (err.code !== "auth/popup-closed-by-user") {
+        setError("Error al registrarse con Google. Intenta de nuevo.");
+      }
     } finally {
       setLoading(false);
     }
@@ -66,6 +82,21 @@ function Register() {
             {loading ? "Creando cuenta..." : "Registrarme"}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>o regístrate con</span>
+        </div>
+
+        <button
+          type="button"
+          className="auth-social-button"
+          onClick={handleGoogleRegister}
+          disabled={loading}
+        >
+          <FcGoogle className="auth-social-icon" />
+          Google
+        </button>
+
         <p className="auth-switch">
           ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
         </p>

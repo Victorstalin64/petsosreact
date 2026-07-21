@@ -3,17 +3,20 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   LuPawPrint, LuSearch, LuPlus, LuUser,
-  LuTriangleAlert, LuLogOut
+  LuTriangleAlert, LuLogOut, LuBell, LuBellOff
 } from "react-icons/lu";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { obtenerMisMascotas } from "../../services/petService";
 import { obtenerMisReportes } from "../../services/foundAnimalService";
+import { useNotificacionesPush } from "../../hooks/useNotificacionesPush";
+import DashboardCharts from "./DashboardCharts";
 import "./Pages.css";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({ mascotas: 0, reportes: 0 });
+  const { permiso, solicitarPermiso } = useNotificacionesPush();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -41,6 +44,12 @@ function Dashboard() {
       await signOut(auth);
     } catch (err) {
       console.error("Error al cerrar sesión:", err);
+    }
+  };
+
+  const handleNotificacion = async () => {
+    if (permiso !== "granted") {
+      await solicitarPermiso();
     }
   };
 
@@ -78,9 +87,19 @@ function Dashboard() {
             <h3>{user.email}</h3>
             <span>Miembro de PetSOS</span>
           </div>
-          <button className="button button--outline" onClick={handleLogout}>
-            <LuLogOut /> Cerrar Sesión
-          </button>
+          <div className="dashboard-user__actions">
+            <button
+              className={`button ${permiso === "granted" ? "button--outline" : "button--primary-small"}`}
+              onClick={handleNotificacion}
+              title={permiso === "granted" ? "Notificaciones activadas" : "Activar notificaciones"}
+            >
+              {permiso === "granted" ? <LuBell /> : <LuBellOff />}
+              {permiso === "granted" ? "Notificaciones" : "Activar Alertas"}
+            </button>
+            <button className="button button--outline" onClick={handleLogout}>
+              <LuLogOut /> Cerrar Sesión
+            </button>
+          </div>
         </div>
 
         <div className="stats-grid">
@@ -110,6 +129,8 @@ function Dashboard() {
             </div>
           </motion.div>
         </div>
+
+        <DashboardCharts stats={stats} />
 
         <div className="actions-grid">
           <Link to="/registrar-mascota" className="action-card">

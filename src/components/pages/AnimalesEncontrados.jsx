@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   LuSearch, LuMapPin, LuCalendar, LuPhone, 
-  LuX, LuFilter
+  LuX, LuFilter, LuFileDown
 } from "react-icons/lu";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { ReporteAnimalPDF } from "./PdfDocuments";
 import { obtenerAnimalesEncontrados, actualizarReporte } from "../../services/foundAnimalService";
 import "./Pages.css";
 
@@ -251,6 +253,13 @@ function AnimalesEncontrados() {
               </div>
 
               <div className="modal-footer">
+                <PDFDownloadLink
+                  document={<ReporteAnimalPDF animal={animalSeleccionado} />}
+                  fileName={`reporte-animal-${animalSeleccionado.especie || "encontrado"}.pdf`}
+                  className="pdf-button"
+                >
+                  <LuFileDown /> Descargar Reporte
+                </PDFDownloadLink>
                 {animalSeleccionado.telefonoReportador && (
                   <button 
                     className="button page-button page-button--green"
