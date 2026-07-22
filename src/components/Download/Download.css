@@ -1,46 +1,96 @@
 .download {
-  padding: 3rem 0;
+  padding: 5rem 0;
   background: linear-gradient(120deg, #293A4E 0%, #1f2a3a 100%);
   color: white;
+  overflow: hidden;
 }
 
 .download__container {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  justify-content: space-between;
+  gap: 3rem;
   flex-wrap: wrap;
 }
 
 .download__image {
-  flex: 1;
-  text-align: center;
+  flex: 1 1 400px;
+  min-width: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .download__image img {
-  max-width: 260px;
+  width: 470px; /* Cambia a 500px si lo quieres aún más grande */
+  max-width: none;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.5));
 }
 
 .download__info {
-  flex: 1;
+  flex: 1 1 400px;
+  min-width: 320px;
 }
 
 .download__info h2 {
-  font-size: 2.2rem;
-  margin-bottom: 0.75rem;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
 }
 
 .download__info p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.8);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .download__buttons {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.download__badge {
+  display: inline-flex;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.download__badge:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .download__buttons img {
-  height: 50px;
+  height: 55px;
+  width: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.download__buttons img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .download__container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .download__image img {
+    width: 300px;
+  }
+
+  .download__buttons {
+    justify-content: center;
+  }
 }

@@ -1,13 +1,12 @@
 import "./Download.css";
 
-import appImage from "../../assets/images/AppPetSOS.png";
+import appImage from "../../assets/images/phone-mockup.png";
 import playstore from "../../assets/images/playstore.png";
 import googleplay from "../../assets/images/googleplay.png";
 
 function Download() {
   return (
     <section id="app" className="download">
-
       <div className="container download__container">
 
         <div className="download__image">
@@ -15,23 +14,25 @@ function Download() {
         </div>
 
         <div className="download__info">
-
           <h2>Descarga la App PetSOS</h2>
 
           <p>
-            Encuentra mascotas perdidas, recibe alertas
-            y conecta con tu comunidad.
+            Encuentra mascotas perdidas, recibe alertas y conecta con tu
+            comunidad.
           </p>
 
           <div className="download__buttons">
-            <img src={playstore} alt="Play Store" />
-            <img src={googleplay} alt="Google Play" />
-          </div>
+            <a href="#">
+              <img src={playstore} alt="App Store" />
+            </a>
 
+            <a href="#">
+              <img src={googleplay} alt="Google Play" />
+            </a>
+          </div>
         </div>
 
       </div>
-
     </section>
   );
 }
