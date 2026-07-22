@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==================== MASCOTAS ====================
+    match /mascotas/{mascotaId} {
+      // Create: solo usuarios autenticados
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll([
+          "nombre", "especie", "raza", "edad", "sexo",
+          "color", "tamano", "fotoUrl", "uidDueno", "emailDueno"
+        ])
+        && request.resource.data.uidDueno == request.auth.uid
+        && request.resource.data.emailDueno == request.auth.token.email;
+
+      // Read: cualquier usuario autenticado puede ver mascotas
+      allow read: if request.auth != null;
+
+      // Update: solo el dueño puede actualizar
+      allow update: if request.auth != null
+        && resource.data.uidDueno == request.auth.uid;
+
+      // Delete: solo el dueño puede eliminar
+      allow delete: if request.auth != null
+        && resource.data.uidDueno == request.auth.uid;
+    }
+
+    // ==================== REPORTES DE ANIMALES ====================
+    match /reportes_animales/{reporteId} {
+      // Create: cualquier usuario (autenticado o anónimo) puede reportar
+      allow create: if true;
+
+      // Read: cualquier usuario puede ver reportes (lista pública)
+      allow read: if request.auth != null;
+
+      // Update: solo el reportador puede actualizar su reporte
+      allow update: if request.auth != null
+        && (
+          resource.data.uidReportador == request.auth.uid
+          || resource.data.uidReportador == null
+        );
+
+      // Delete: solo el reportador puede eliminar su reporte
+      allow delete: if request.auth != null
+        && (
+          resource.data.uidReportador == request.auth.uid
+          || resource.data.uidReportador == null
+        );
+    }
+
+    // ==================== USUARIOS (perfil) ====================
+    match /usuarios/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.auth.uid == userId;
+      allow update: if request.auth != null
+        && request.auth.uid == userId;
+      allow delete: if request.auth != null
+        && request.auth.uid == userId;
+    }
+  }
+}
