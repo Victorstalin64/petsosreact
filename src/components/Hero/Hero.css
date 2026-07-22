@@ -1,6 +1,6 @@
 .hero {
   background: linear-gradient(135deg, #fff8e7 0%, #ffe6b3 100%);
-  padding: 2.5rem 0 1.5rem;
+  padding: 3rem 0 1.5rem;
 }
 
 [data-theme="dark"] .hero {
@@ -21,7 +21,8 @@
 }
 
 .hero__content h2 {
-  font-size: 2.5rem;
+  font-size: 3rem;
+  line-height: 1.2;
   margin-bottom: 1.5rem;
   animation: heroTypewriter 0.6s ease-out;
 }
@@ -46,16 +47,17 @@
 }
 
 .hero__image img {
-  max-width: 350px;
+  max-width: 380px;
 }
 
 .button {
   display: inline-block;
   background-color: var(--color-primary);
   color: var(--color-secondary);
-  padding: 0.8rem 1.8rem;
+  padding: 0.9rem 2rem;
   border-radius: 40px;
   font-weight: bold;
+  font-size: 1.05rem;
   transition: var(--transition);
 }
 
@@ -75,10 +77,11 @@
 
 .service-card {
   background: white;
-  padding: 0.8rem 1.5rem;
+  padding: 0.9rem 1.75rem;
   border-radius: 40px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   font-weight: bold;
+  font-size: 1.05rem;
   transition: var(--transition);
 }
 

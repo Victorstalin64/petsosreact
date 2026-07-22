@@ -1,5 +1,5 @@
 .about {
-  padding: 2.5rem 0;
+  padding: 3rem 0;
   background-color: var(--color-card);
 }
 
@@ -9,7 +9,7 @@
 
 .about__container {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -19,7 +19,7 @@
 }
 
 .about__text h2 {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   color: var(--color-secondary);
   margin-bottom: 0.75rem;
 }
@@ -31,7 +31,8 @@
 .about__text p {
   margin-top: 0.75rem;
   color: var(--color-text-secondary);
-  font-size: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
 }
 
 .about__image {

@@ -1,17 +1,17 @@
 .footer {
   background-color: #293A4E;
   color: white;
-  padding: 2.5rem 0 1rem;
+  padding: 3rem 0 1rem;
 }
 
 .footer__container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 2rem;
 }
 
 .footer__brand h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 0.75rem;
 }
 
@@ -25,12 +25,14 @@
 .footer__brand p {
   color: #ddd;
   line-height: 1.6;
-  max-width: 280px;
+  max-width: 300px;
+  font-size: 1rem;
 }
 
 .footer h3 {
   color: #FBBC05;
   margin-bottom: 0.75rem;
+  font-size: 1.15rem;
 }
 
 .footer__links {
@@ -42,7 +44,7 @@
 .footer__links a {
   color: white;
   transition: 0.3s;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .footer__links a:hover {
@@ -52,7 +54,7 @@
 
 .footer__contact p {
   margin-bottom: 8px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .social__icons {
@@ -62,8 +64,8 @@
 }
 
 .social__icons a {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,6 +73,7 @@
   background: rgba(255,255,255,.15);
   color: white;
   transition: .3s;
+  font-size: 1.1rem;
 }
 
 .social__icons a:hover {
@@ -85,5 +88,5 @@
   border-top: 1px solid rgba(255,255,255,.2);
   text-align: center;
   color: #ccc;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }

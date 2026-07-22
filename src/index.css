@@ -42,7 +42,8 @@ body {
   font-family: var(--font-main);
   background-color: var(--color-bg);
   color: var(--color-text);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 17px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -61,8 +62,8 @@ ul {
 }
 
 .container {
-  width: 90%;
-  max-width: 1200px;
+  width: 93.5%;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
