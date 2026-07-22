@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 import { 
   LuPawPrint, LuPlus, LuTrash2, 
   LuHeart, LuCalendar, LuX, LuFileDown
@@ -26,8 +27,9 @@ function MisMascotas() {
           try {
             const data = await obtenerMisMascotas();
             setMascotas(data);
-          } catch {
-            setError("Error al cargar las mascotas");
+          } catch (err) {
+            console.error("Error al cargar mascotas:", err);
+            setError(err.message || "Error al cargar las mascotas");
           } finally {
             setLoading(false);
           }
@@ -46,8 +48,10 @@ function MisMascotas() {
         await eliminarMascota(id);
         setMascotas(prev => prev.filter(m => m.id !== id));
         setMascotaSeleccionada(null);
-      } catch {
-        setError("Error al eliminar");
+        toast.success("Mascota eliminada correctamente");
+      } catch (err) {
+        console.error("Error al eliminar mascota:", err);
+        toast.error(err.message || "Error al eliminar");
       }
     }
   };

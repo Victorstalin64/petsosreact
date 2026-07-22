@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { LuMapPin, LuSave, LuCircleAlert, LuSearch, LuImage } from "react-icons/lu";
 import { reportarAnimalEncontrado } from "../../services/foundAnimalService";
 import { auth } from "../../firebase";
@@ -17,6 +18,16 @@ function ReportarAnimal() {
   const [exito, setExito] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
   
   const [form, setForm] = useState({
     especie: "Perro",
@@ -44,12 +55,12 @@ function ReportarAnimal() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setError("Solo se permiten archivos de imagen.");
+      toast.warning("Solo se permiten archivos de imagen");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setError("La imagen no debe superar 5MB.");
+      toast.warning("La imagen no debe superar 5MB");
       return;
     }
 
@@ -61,9 +72,10 @@ function ReportarAnimal() {
     try {
       const url = await subirImagen(file, "reportes-animales");
       setForm(prev => ({ ...prev, fotoUrl: url }));
+      toast.success("Imagen subida correctamente");
     } catch (err) {
       console.error("Error al subir imagen:", err);
-      setError("Error al subir la imagen. Puedes intentar de nuevo o usar una URL.");
+      toast.error("Error al subir la imagen. Intenta de nuevo.");
     } finally {
       setUploading(false);
     }
@@ -75,16 +87,17 @@ function ReportarAnimal() {
     setLoading(true);
     
     try {
-      const user = auth.currentUser;
       await reportarAnimalEncontrado({
         ...form,
         nombreReportador: form.nombreReportador || (user ? user.email : "Anónimo"),
         tieneDuenoConocido: false
       });
+      toast.success("Reporte enviado exitosamente");
       setExito(true);
       setTimeout(() => navigate("/animales-encontrados"), 2000);
-    } catch {
-      setError("Error al enviar el reporte. Intenta de nuevo.");
+    } catch (err) {
+      console.error("Error al enviar reporte:", err);
+      toast.error(err.message || "Error al enviar el reporte");
     } finally {
       setLoading(false);
     }
@@ -104,6 +117,31 @@ function ReportarAnimal() {
             <h2>¡Reporte Enviado!</h2>
             <p>Gracias por reportar un animal encontrado. Tu ayuda es importante.</p>
           </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  if (authLoading) {
+    return (
+      <section className="page-section">
+        <div className="page-card">
+          <div className="page-loading">Verificando sesión...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!user) {
+    return (
+      <section className="page-section">
+        <div className="page-card">
+          <div className="page-empty">
+            <LuSearch className="page-empty__icon" />
+            <h2>Inicia sesión para reportar animales</h2>
+            <p>Debes estar autenticado para enviar un reporte</p>
+            <Link to="/login" className="button page-button">Iniciar Sesión</Link>
+          </div>
         </div>
       </section>
     );

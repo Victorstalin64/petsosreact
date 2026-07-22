@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { LuPawPrint, LuSave, LuCircleAlert, LuImage } from "react-icons/lu";
 import { registrarMascota } from "../../services/petService";
 import { subirImagen } from "../../services/storageService";
+import { auth } from "../../firebase";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Hamster", "Otro"];
@@ -16,6 +18,16 @@ function RegistrarMascota() {
   const [exito, setExito] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
   
   const [form, setForm] = useState({
     nombre: "",
@@ -47,12 +59,12 @@ function RegistrarMascota() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setError("Solo se permiten archivos de imagen.");
+      toast.warning("Solo se permiten archivos de imagen");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setError("La imagen no debe superar 5MB.");
+      toast.warning("La imagen no debe superar 5MB");
       return;
     }
 
@@ -64,9 +76,10 @@ function RegistrarMascota() {
     try {
       const url = await subirImagen(file, "mascotas");
       setForm(prev => ({ ...prev, fotoUrl: url }));
+      toast.success("Imagen subida correctamente");
     } catch (err) {
       console.error("Error al subir imagen:", err);
-      setError("Error al subir la imagen. Puedes intentar de nuevo o usar una URL.");
+      toast.error("Error al subir la imagen. Intenta de nuevo.");
     } finally {
       setUploading(false);
     }
@@ -79,10 +92,12 @@ function RegistrarMascota() {
     
     try {
       await registrarMascota(form);
+      toast.success("Mascota registrada exitosamente");
       setExito(true);
       setTimeout(() => navigate("/mis-mascotas"), 2000);
-    } catch {
-      setError("Error al registrar la mascota. Intenta de nuevo.");
+    } catch (err) {
+      console.error("Error al registrar mascota:", err);
+      toast.error(err.message || "Error al registrar la mascota");
     } finally {
       setLoading(false);
     }
@@ -102,6 +117,31 @@ function RegistrarMascota() {
             <h2>¡Mascota Registrada!</h2>
             <p>Tu mascota ha sido registrada exitosamente.</p>
           </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  if (authLoading) {
+    return (
+      <section className="page-section">
+        <div className="page-card">
+          <div className="page-loading">Verificando sesión...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!user) {
+    return (
+      <section className="page-section">
+        <div className="page-card">
+          <div className="page-empty">
+            <LuPawPrint className="page-empty__icon" />
+            <h2>Inicia sesión para registrar mascotas</h2>
+            <p>Debes estar autenticado para registrar una mascota</p>
+            <Link to="/login" className="button page-button">Iniciar Sesión</Link>
+          </div>
         </div>
       </section>
     );

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { LuSun, LuMoon } from "react-icons/lu";
 import { auth } from "../../firebase";
 import "./Header.css";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("petsos-theme") || "light";
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -20,6 +24,15 @@ function Header() {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("petsos-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "light" ? "dark" : "light");
+  };
 
   return (
     <motion.header
@@ -46,6 +59,17 @@ function Header() {
                 <li><Link to="/mis-mascotas">Mis Mascotas</Link></li>
               </>
             )}
+            <li>
+              <motion.button
+                className="theme-toggle"
+                onClick={toggleTheme}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title={theme === "light" ? "Modo oscuro" : "Modo claro"}
+              >
+                {theme === "light" ? <LuMoon /> : <LuSun />}
+              </motion.button>
+            </li>
             <li>
               <motion.div
                 whileHover={{ scale: 1.06 }}

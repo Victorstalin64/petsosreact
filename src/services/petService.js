@@ -18,23 +18,33 @@ export async function registrarMascota(mascota) {
   const user = auth.currentUser;
   if (!user) throw new Error("Debes iniciar sesión para registrar una mascota");
   
-  const docRef = await addDoc(mascotasRef, {
-    ...mascota,
-    uidDueno: user.uid,
-    emailDueno: user.email,
-    fechaRegistro: serverTimestamp(),
-    estado: "activo"
-  });
-  return docRef.id;
+  try {
+    const docRef = await addDoc(mascotasRef, {
+      ...mascota,
+      uidDueno: user.uid,
+      emailDueno: user.email,
+      fechaRegistro: serverTimestamp(),
+      estado: "activo"
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error("Error al registrar mascota en Firestore:", error.code, error.message);
+    throw error;
+  }
 }
 
 export async function obtenerMisMascotas() {
   const user = auth.currentUser;
   if (!user) throw new Error("Debes iniciar sesión");
   
-  const q = query(mascotasRef, where("uidDueno", "==", user.uid));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(mascotasRef, where("uidDueno", "==", user.uid));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error al obtener mascotas:", error.code, error.message);
+    throw error;
+  }
 }
 
 export async function obtenerMascotaPorId(id) {
@@ -46,10 +56,20 @@ export async function obtenerMascotaPorId(id) {
 
 export async function actualizarMascota(id, datos) {
   const docRef = doc(db, "mascotas", id);
-  await updateDoc(docRef, datos);
+  try {
+    await updateDoc(docRef, datos);
+  } catch (error) {
+    console.error("Error al actualizar mascota:", error.code, error.message);
+    throw error;
+  }
 }
 
 export async function eliminarMascota(id) {
   const docRef = doc(db, "mascotas", id);
-  await deleteDoc(docRef);
+  try {
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error("Error al eliminar mascota:", error.code, error.message);
+    throw error;
+  }
 }

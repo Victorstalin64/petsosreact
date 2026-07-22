@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { toast } from "react-toastify";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
 import "./Auth.css";
@@ -18,6 +19,7 @@ function Login() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      toast.success("Sesión iniciada correctamente");
       navigate("/");
     } catch (err) {
       setError(traducirError(err.code));
@@ -31,6 +33,7 @@ function Login() {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
+      toast.success("Sesión iniciada con Google");
       navigate("/");
     } catch (err) {
       if (err.code !== "auth/popup-closed-by-user") {

@@ -1,46 +1,56 @@
 .services {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
   background-color: #fef7e0;
+}
+
+[data-theme="dark"] .services {
+  background-color: #1a2332;
 }
 
 .section__title {
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
   color: var(--color-secondary);
+}
+
+[data-theme="dark"] .section__title {
+  color: var(--color-text);
 }
 
 .section__subtitle {
   text-align: center;
-  color: gray;
-  margin-top: 1rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
 }
 
 .services__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .service-item {
-  background: white;
-  padding: 2rem;
-  border-radius: 24px;
+  background: var(--color-card);
+  padding: 1.5rem;
+  border-radius: 20px;
   text-align: center;
   transition: var(--transition);
 }
 
 .service-item:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px var(--color-shadow);
 }
 
 .service-item img {
-  width: 100px;
+  width: 80px;
   margin: auto;
 }
 
 .service-item h3 {
-  margin: 1rem 0;
+  margin: 0.75rem 0;
+  color: var(--color-text);
 }
 
 .button--small {

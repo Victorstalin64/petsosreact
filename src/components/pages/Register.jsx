@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { toast } from "react-toastify";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
 import "./Auth.css";
@@ -17,16 +18,17 @@ function Register() {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden.");
+      toast.warning("Las contraseñas no coinciden");
       return;
     }
     if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.");
+      toast.warning("La contraseña debe tener al menos 6 caracteres");
       return;
     }
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Cuenta creada exitosamente");
       navigate("/");
     } catch (err) {
       setError(traducirError(err.code));
@@ -40,6 +42,7 @@ function Register() {
     setLoading(true);
     try {
       await signInWithPopup(auth, googleProvider);
+      toast.success("Cuenta creada con Google");
       navigate("/");
     } catch (err) {
       if (err.code !== "auth/popup-closed-by-user") {

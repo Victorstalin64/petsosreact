@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { 
   LuPawPrint, LuSearch, LuPlus, LuUser,
   LuTriangleAlert, LuLogOut, LuBell, LuBellOff
@@ -29,8 +30,8 @@ function Dashboard() {
               obtenerMisReportes()
             ]);
             setStats({ mascotas: mascotas.length, reportes: reportes.length });
-          } catch {
-            console.error("Error al cargar estadísticas");
+          } catch (err) {
+            console.error("Error al cargar estadísticas:", err);
           }
         }
         cargarEstadisticas();
@@ -49,7 +50,14 @@ function Dashboard() {
 
   const handleNotificacion = async () => {
     if (permiso !== "granted") {
-      await solicitarPermiso();
+      const result = await solicitarPermiso();
+      if (result) {
+        toast.success("Notificaciones activadas correctamente");
+      } else {
+        toast.warning("No se pudieron activar las notificaciones");
+      }
+    } else {
+      toast.info("Las notificaciones ya están activadas");
     }
   };
 

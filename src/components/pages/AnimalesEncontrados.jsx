@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 import { 
   LuSearch, LuMapPin, LuCalendar, LuPhone, 
   LuX, LuFilter, LuFileDown
@@ -24,8 +25,9 @@ function AnimalesEncontrados() {
       try {
         const data = await obtenerAnimalesEncontrados();
         setAnimales(data);
-      } catch {
-        setError("Error al cargar los reportes");
+      } catch (err) {
+        console.error("Error al cargar reportes:", err);
+        setError(err.message || "Error al cargar los reportes");
       } finally {
         setLoading(false);
       }
@@ -41,12 +43,14 @@ function AnimalesEncontrados() {
     try {
       await actualizarReporte(animal.id, { notificado: true });
       if (animal.telefonoReportador) {
+        toast.info("Abriendo marcador telefónico...");
         window.open(`tel:${animal.telefonoReportador}`, "_self");
       } else {
-        alert("No hay número de contacto disponible");
+        toast.warning("No hay número de contacto disponible");
       }
-    } catch {
-      setError("Error al procesar");
+    } catch (err) {
+      console.error("Error al procesar contacto:", err);
+      toast.error(err.message || "Error al procesar");
     }
   };
 
