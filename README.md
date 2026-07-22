@@ -1,6 +1,6 @@
 # 🐾 PetSOS React
 
-PetSOS es una aplicación web desarrollada para ayudar a los dueños de mascotas a localizar, reportar y gestionar información relacionada con mascotas extraviadas. Este proyecto corresponde a la migración de una página web desarrollada originalmente en HTML, CSS y JavaScript a una arquitectura moderna basada en React y Vite.
+PetSOS es una aplicación web desarrollada para ayudar a los usuarios y rescatistas a gestionar adopciones, reportar casos de fauna urbana y brindar asistencia interactiva mediante un chatbot inteligente. Este proyecto corresponde a una arquitectura moderna basada en React, Vite y Firebase.
 
 ## 🚀 Tecnologías Utilizadas
 
@@ -9,6 +9,7 @@ PetSOS es una aplicación web desarrollada para ayudar a los dueños de mascotas
 * CSS3
 * JavaScript (ES6+)
 * React Icons
+* Firebase (Cloud Firestore y Autenticación)
 
 ## 📂 Estructura del Proyecto
 
@@ -79,7 +80,8 @@ src/
 * Información institucional.
 * Servicios ofrecidos por PetSOS.
 * Características principales de la aplicación.
-* Descarga de la aplicación móvil.
+* Conexión a base de datos en tiempo real con Firebase Cloud Firestore.
+* PetsosBot Asistente virtual integrado mediante script en el HTML para resolver dudas sobre adopciones y reportes de fauna urbana.
 * Galería informativa.
 * Formulario de contacto.
 * Pie de página con enlaces y redes sociales.
