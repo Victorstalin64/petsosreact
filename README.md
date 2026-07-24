@@ -5,7 +5,6 @@
 ![React](https://img.shields.io/badge/React-19-blue?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-7-purple?logo=vite)
 ![Firebase](https://img.shields.io/badge/Firebase-Cloud-orange?logo=firebase)
-![License](https://img.shields.io/badge/License-Academic-green)
 
 **Plataforma web para la gestión de adopciones, reportes de fauna urbana y asistencia mediante inteligencia artificial.**
 
