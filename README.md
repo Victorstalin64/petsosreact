@@ -193,9 +193,4 @@ El proyecto sigue una arquitectura basada en componentes de React, permitiendo:
 
 ---
 
-
-![Dashboard](docs/dashboard.png)
-```
-
-
 </div>
