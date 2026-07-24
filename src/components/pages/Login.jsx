@@ -39,11 +39,6 @@ function Login() {
       toast.success("Sesión iniciada con Google");
       navigate("/");
     } catch (err) {
-<<<<<<< HEAD
-      console.error("Google auth error:", err.code, err.message);
-      if (err.code !== "auth/popup-closed-by-user") {
-        setError("Error al iniciar sesión con Google. Intenta de nuevo.");
-=======
       console.error("Error Google Login:", err.code, err.message);
       if (err.code === "auth/popup-closed-by-user") {
         // Usuario cerró el popup, no mostrar error
@@ -59,7 +54,6 @@ function Login() {
         setError("Demasiados intentos. Espere unos minutos e intente de nuevo.");
       } else {
         setError(`Error: ${err.code} - ${err.message}`);
->>>>>>> 6842cec2b412608a5ad09df32ed22700122f071b
       }
     } finally {
       setLoading(false);
