@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { LuSun, LuMoon } from "react-icons/lu";
+import { LuSun, LuMoon, LuMenu, LuX } from "react-icons/lu";
 import { auth } from "../../firebase";
 import "./Header.css";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("petsos-theme") || "light";
   });
@@ -34,6 +35,8 @@ function Header() {
     setTheme(prev => prev === "light" ? "dark" : "light");
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <motion.header
       className={`header ${scrolled ? "header--scrolled" : ""}`}
@@ -47,16 +50,24 @@ function Header() {
           Pet <span className="navbar__logo--primary">SOS</span>
         </h1>
 
-        <nav className="nav">
+        <button
+          className="nav__toggle"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+        >
+          {menuOpen ? <LuX /> : <LuMenu />}
+        </button>
+
+        <nav className={`nav ${menuOpen ? "nav--open" : ""}`}>
           <ul className="nav__menu">
-            <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/#nosotros">Nosotros</Link></li>
-            <li><Link to="/servicios">Servicios</Link></li>
-            <li><Link to="/animales-encontrados">Encontrados</Link></li>
+            <li><Link to="/" onClick={closeMenu}>Inicio</Link></li>
+            <li><Link to="/#nosotros" onClick={closeMenu}>Nosotros</Link></li>
+            <li><Link to="/servicios" onClick={closeMenu}>Servicios</Link></li>
+            <li><Link to="/animales-encontrados" onClick={closeMenu}>Encontrados</Link></li>
             {user && (
               <>
-                <li><Link to="/panel">Mi Panel</Link></li>
-                <li><Link to="/mis-mascotas">Mis Mascotas</Link></li>
+                <li><Link to="/panel" onClick={closeMenu}>Mi Panel</Link></li>
+                <li><Link to="/mis-mascotas" onClick={closeMenu}>Mis Mascotas</Link></li>
               </>
             )}
             <li>
@@ -76,11 +87,11 @@ function Header() {
                 whileTap={{ scale: 0.97 }}
               >
                 {user ? (
-                  <Link to="/panel" className="nav__login">
+                  <Link to="/panel" className="nav__login" onClick={closeMenu}>
                     Mi Cuenta
                   </Link>
                 ) : (
-                  <Link to="/login" className="nav__login">
+                  <Link to="/login" className="nav__login" onClick={closeMenu}>
                     Acceso
                   </Link>
                 )}

@@ -1,5 +1,6 @@
 import "./Hero.css";
 import retriever from "../../assets/images/Retriever.png";
+import { FaPaw, FaMapMarkedAlt, FaBell, FaUsers } from "react-icons/fa";
 
 function Hero() {
   return (
@@ -28,18 +29,22 @@ function Hero() {
       <div className="hero__services">
 
         <div className="service-card">
+          <FaPaw className="service-card__icon" />
           <p>Mascotas</p>
         </div>
 
         <div className="service-card">
+          <FaMapMarkedAlt className="service-card__icon" />
           <p>Mapa</p>
         </div>
 
         <div className="service-card">
+          <FaBell className="service-card__icon" />
           <p>Alertas</p>
         </div>
 
         <div className="service-card">
+          <FaUsers className="service-card__icon" />
           <p>Comunidad</p>
         </div>
 

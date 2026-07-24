@@ -4,6 +4,8 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from "react-toastify";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import retrieverImg from "../../assets/images/Retriever.png";
 import "./Auth.css";
 
 function Login() {
@@ -11,6 +13,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -36,6 +39,7 @@ function Login() {
       toast.success("Sesión iniciada con Google");
       navigate("/");
     } catch (err) {
+      console.error("Google auth error:", err.code, err.message);
       if (err.code !== "auth/popup-closed-by-user") {
         setError("Error al iniciar sesión con Google. Intenta de nuevo.");
       }
@@ -46,47 +50,77 @@ function Login() {
 
   return (
     <section className="auth-section">
-      <div className="auth-card">
-        <h2>Iniciar sesión</h2>
-        <p className="auth-subtitle">Bienvenido de nuevo a PetSOS</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Correo"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <p className="auth-error">{error}</p>}
-          <button type="submit" className="button auth-button" disabled={loading}>
-            {loading ? "Ingresando..." : "Ingresar"}
-          </button>
-        </form>
-
-        <div className="auth-divider">
-          <span>o continúa con</span>
+      <div className="auth-wrapper">
+        <div
+          className="auth-brand-panel"
+          style={{ backgroundImage: `url(${retrieverImg})` }}
+        >
+          <div className="auth-brand-overlay">
+            <p className="auth-brand-logo">
+              Pet<span>SOS</span>
+            </p>
+            <h3>Bienvenido de nuevo</h3>
+            <p>Inicia sesión y sigue ayudando a reunir mascotas con sus familias.</p>
+          </div>
         </div>
 
-        <button
-          type="button"
-          className="auth-social-button"
-          onClick={handleGoogleLogin}
-          disabled={loading}
-        >
-          <FcGoogle className="auth-social-icon" />
-          Google
-        </button>
+        <div className="auth-card">
+          <h2>Iniciar sesión</h2>
+          <p className="auth-subtitle">Bienvenido de nuevo a PetSOS</p>
+          <form onSubmit={handleSubmit}>
+            <div className="auth-input-group">
+              <FiMail className="auth-input-icon" />
+              <input
+                type="email"
+                placeholder="Correo"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-input-group">
+              <FiLock className="auth-input-icon" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="auth-toggle-password"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                tabIndex={-1}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+            {error && <p className="auth-error">{error}</p>}
+            <button type="submit" className="button auth-button" disabled={loading}>
+              {loading ? "Ingresando..." : "Ingresar"}
+            </button>
+          </form>
 
-        <p className="auth-switch">
-          ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
-        </p>
+          <div className="auth-divider">
+            <span>o continúa con</span>
+          </div>
+
+          <button
+            type="button"
+            className="auth-social-button"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+          >
+            <FcGoogle className="auth-social-icon" />
+            Google
+          </button>
+
+          <p className="auth-switch">
+            ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
+          </p>
+        </div>
       </div>
     </section>
   );

@@ -6,6 +6,7 @@ import { LuMapPin, LuSave, LuCircleAlert, LuSearch, LuImage } from "react-icons/
 import { reportarAnimalEncontrado } from "../../services/foundAnimalService";
 import { auth } from "../../firebase";
 import { subirImagen } from "../../services/storageService";
+import animalEncontradoImg from "../../assets/images/AnimalEncontrado.png";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Otro"];
@@ -20,7 +21,7 @@ function ReportarAnimal() {
   const [previewUrl, setPreviewUrl] = useState("");
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
@@ -28,7 +29,7 @@ function ReportarAnimal() {
     });
     return () => unsubscribe();
   }, []);
-  
+
   const [form, setForm] = useState({
     especie: "Perro",
     color: "",
@@ -85,7 +86,7 @@ function ReportarAnimal() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    
+
     try {
       await reportarAnimalEncontrado({
         ...form,
@@ -107,7 +108,7 @@ function ReportarAnimal() {
     return (
       <section className="page-section">
         <div className="page-card">
-          <motion.div 
+          <motion.div
             className="success-message"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -149,230 +150,245 @@ function ReportarAnimal() {
 
   return (
     <section className="page-section">
-      <div className="page-card page-card--wide">
-        <div className="page-header">
-          <LuSearch className="page-header__icon page-header__icon--blue" />
-          <h2>Reportar Animal Encontrado</h2>
-          <p className="page-subtitle">
-            Si encontraste un animal en estado de abandono, registra su información aquí
-          </p>
+      <div className="report-layout">
+        <div
+          className="report-image-panel"
+          style={{ backgroundImage: `url(${animalEncontradoImg})` }}
+        >
+          <div className="report-image-panel__overlay">
+            <p className="report-image-panel__logo">
+              Pet<span>SOS</span>
+            </p>
+            <h3>Cada reporte cuenta</h3>
+            <p>Tu ayuda puede ser la diferencia para que un animal encuentre un hogar seguro.</p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="page-form">
-          <div className="form-section">
-            <h3 className="form-section__title">
-              <span className="form-section__number">1</span>
-              Información del Animal
-            </h3>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Especie *</label>
-                <select name="especie" value={form.especie} onChange={handleChange} required>
-                  {especies.map(e => (
-                    <option key={e} value={e}>{e}</option>
-                  ))}
-                </select>
+        <div className="page-card page-card--wide report-form-card">
+          <div className="page-header">
+            <LuSearch className="page-header__icon page-header__icon--blue" />
+            <h2>Reportar Animal Encontrado</h2>
+            <p className="page-subtitle">
+              Si encontraste un animal en estado de abandono, registra su información aquí
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="page-form">
+            <div className="form-section">
+              <h3 className="form-section__title">
+                <span className="form-section__number">1</span>
+                Información del Animal
+              </h3>
+
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Especie *</label>
+                  <select name="especie" value={form.especie} onChange={handleChange} required>
+                    {especies.map(e => (
+                      <option key={e} value={e}>{e}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Color *</label>
+                  <input
+                    type="text"
+                    name="color"
+                    value={form.color}
+                    onChange={handleChange}
+                    placeholder="Color o colores principales"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Tamaño aproximado</label>
+                  <select name="tamano" value={form.tamano} onChange={handleChange}>
+                    <option value="">Seleccionar</option>
+                    <option value="Pequeño">Pequeño</option>
+                    <option value="Mediano">Mediano</option>
+                    <option value="Grande">Grande</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Estado del Animal *</label>
+                  <select name="estadoAnimal" value={form.estadoAnimal} onChange={handleChange} required>
+                    {estados.map(e => (
+                      <option key={e} value={e}>{e}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="form-group">
-                <label>Color *</label>
-                <input
-                  type="text"
-                  name="color"
-                  value={form.color}
+                <label>Descripción Visual *</label>
+                <textarea
+                  name="descripcionVisual"
+                  value={form.descripcionVisual}
                   onChange={handleChange}
-                  placeholder="Color o colores principales"
+                  placeholder="Describe la apariencia: tamaño, color, pelaje, orejas, marca, collar, etc."
+                  rows="3"
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Tamaño aproximado</label>
-                <select name="tamano" value={form.tamano} onChange={handleChange}>
-                  <option value="">Seleccionar</option>
-                  <option value="Pequeño">Pequeño</option>
-                  <option value="Mediano">Mediano</option>
-                  <option value="Grande">Grande</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Estado del Animal *</label>
-                <select name="estadoAnimal" value={form.estadoAnimal} onChange={handleChange} required>
-                  {estados.map(e => (
-                    <option key={e} value={e}>{e}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Descripción Visual *</label>
-              <textarea
-                name="descripcionVisual"
-                value={form.descripcionVisual}
-                onChange={handleChange}
-                placeholder="Describe la apariencia: tamaño, color, pelaje, orejas, marca, collar, etc."
-                rows="3"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Foto del Animal</label>
-              <div className="file-upload-area">
-                <input
-                  type="file"
-                  id="foto-animal"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="file-upload-input"
-                />
-                <label htmlFor="foto-animal" className="file-upload-label">
-                  {uploading ? (
-                    <span className="file-upload-text">Subiendo imagen...</span>
-                  ) : (
-                    <>
-                      <LuImage className="file-upload-icon" />
-                      <span className="file-upload-text">
-                        {form.fotoUrl ? "Cambiar imagen" : "Seleccionar imagen"}
-                      </span>
-                      <span className="file-upload-hint">JPG, PNG o WebP (máx. 5MB)</span>
-                    </>
+                <label>Foto del Animal</label>
+                <div className="file-upload-area">
+                  <input
+                    type="file"
+                    id="foto-animal"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="file-upload-input"
+                  />
+                  <label htmlFor="foto-animal" className="file-upload-label">
+                    {uploading ? (
+                      <span className="file-upload-text">Subiendo imagen...</span>
+                    ) : (
+                      <>
+                        <LuImage className="file-upload-icon" />
+                        <span className="file-upload-text">
+                          {form.fotoUrl ? "Cambiar imagen" : "Seleccionar imagen"}
+                        </span>
+                        <span className="file-upload-hint">JPG, PNG o WebP (máx. 5MB)</span>
+                      </>
+                    )}
+                  </label>
+                  {previewUrl && (
+                    <div className="file-upload-preview">
+                      <img src={previewUrl} alt="Vista previa" />
+                    </div>
                   )}
-                </label>
-                {previewUrl && (
-                  <div className="file-upload-preview">
-                    <img src={previewUrl} alt="Vista previa" />
-                  </div>
+                </div>
+                {form.fotoUrl && !uploading && (
+                  <p className="file-upload-success">✓ Imagen subida correctamente</p>
                 )}
-              </div>
-              {form.fotoUrl && !uploading && (
-                <p className="file-upload-success">✓ Imagen subida correctamente</p>
-              )}
-              <input
-                type="url"
-                name="fotoUrl"
-                value={form.fotoUrl}
-                onChange={handleChange}
-                placeholder="O ingresa una URL de imagen"
-                className="url-input-alt"
-              />
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h3 className="form-section__title">
-              <span className="form-section__number">2</span>
-              Ubicación del Hallazgo
-            </h3>
-            
-            <div className="form-group">
-              <label>Dirección *</label>
-              <div className="input-with-icon">
-                <LuMapPin />
                 <input
-                  type="text"
-                  name="direccionHallazgo"
-                  value={form.direccionHallazgo}
+                  type="url"
+                  name="fotoUrl"
+                  value={form.fotoUrl}
                   onChange={handleChange}
-                  placeholder="Calle principal y número"
-                  required
+                  placeholder="O ingresa una URL de imagen"
+                  className="url-input-alt"
                 />
               </div>
             </div>
 
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Barrio / Zona</label>
-                <input
-                  type="text"
-                  name="barrio"
-                  value={form.barrio}
-                  onChange={handleChange}
-                  placeholder="Barrio o zona"
-                />
-              </div>
+            <div className="form-section">
+              <h3 className="form-section__title">
+                <span className="form-section__number">2</span>
+                Ubicación del Hallazgo
+              </h3>
 
               <div className="form-group">
-                <label>Ciudad *</label>
-                <input
-                  type="text"
-                  name="ciudad"
-                  value={form.ciudad}
-                  onChange={handleChange}
-                  placeholder="Ciudad"
-                  required
-                />
+                <label>Dirección *</label>
+                <div className="input-with-icon">
+                  <LuMapPin />
+                  <input
+                    type="text"
+                    name="direccionHallazgo"
+                    value={form.direccionHallazgo}
+                    onChange={handleChange}
+                    placeholder="Calle principal y número"
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="form-group">
-              <label>Referencia de Ubicación</label>
-              <input
-                type="text"
-                name="referenciaUbicacion"
-                value={form.referenciaUbicacion}
-                onChange={handleChange}
-                placeholder="Ej: frente al parque, cerca del mercado, etc."
-              />
-            </div>
-          </div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Barrio / Zona</label>
+                  <input
+                    type="text"
+                    name="barrio"
+                    value={form.barrio}
+                    onChange={handleChange}
+                    placeholder="Barrio o zona"
+                  />
+                </div>
 
-          <div className="form-section">
-            <h3 className="form-section__title">
-              <span className="form-section__number">3</span>
-              Información del Reportador
-            </h3>
-            
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Tu nombre</label>
-                <input
-                  type="text"
-                  name="nombreReportador"
-                  value={form.nombreReportador}
-                  onChange={handleChange}
-                  placeholder="Tu nombre (opcional)"
-                />
+                <div className="form-group">
+                  <label>Ciudad *</label>
+                  <input
+                    type="text"
+                    name="ciudad"
+                    value={form.ciudad}
+                    onChange={handleChange}
+                    placeholder="Ciudad"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="form-group">
-                <label>Teléfono de contacto</label>
+                <label>Referencia de Ubicación</label>
                 <input
-                  type="tel"
-                  name="telefonoReportador"
-                  value={form.telefonoReportador}
+                  type="text"
+                  name="referenciaUbicacion"
+                  value={form.referenciaUbicacion}
                   onChange={handleChange}
-                  placeholder="Tu teléfono (opcional)"
+                  placeholder="Ej: frente al parque, cerca del mercado, etc."
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label>Notas Adicionales</label>
-              <textarea
-                name="notasAdicionales"
-                value={form.notasAdicionales}
-                onChange={handleChange}
-                placeholder="Cualquier información adicional relevante"
-                rows="2"
-              />
-            </div>
-          </div>
+            <div className="form-section">
+              <h3 className="form-section__title">
+                <span className="form-section__number">3</span>
+                Información del Reportador
+              </h3>
 
-          {error && (
-            <div className="form-error">
-              <LuCircleAlert /> {error}
-            </div>
-          )}
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Tu nombre</label>
+                  <input
+                    type="text"
+                    name="nombreReportador"
+                    value={form.nombreReportador}
+                    onChange={handleChange}
+                    placeholder="Tu nombre (opcional)"
+                  />
+                </div>
 
-          <button type="submit" className="button page-button page-button--blue" disabled={loading || uploading}>
-            <LuSave />
-            {loading ? "Enviando..." : uploading ? "Subiendo foto..." : "Enviar Reporte"}
-          </button>
-        </form>
+                <div className="form-group">
+                  <label>Teléfono de contacto</label>
+                  <input
+                    type="tel"
+                    name="telefonoReportador"
+                    value={form.telefonoReportador}
+                    onChange={handleChange}
+                    placeholder="Tu teléfono (opcional)"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Notas Adicionales</label>
+                <textarea
+                  name="notasAdicionales"
+                  value={form.notasAdicionales}
+                  onChange={handleChange}
+                  placeholder="Cualquier información adicional relevante"
+                  rows="2"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="form-error">
+                <LuCircleAlert /> {error}
+              </div>
+            )}
+
+            <button type="submit" className="button page-button page-button--blue" disabled={loading || uploading}>
+              <LuSave />
+              {loading ? "Enviando..." : uploading ? "Subiendo foto..." : "Enviar Reporte"}
+            </button>
+          </form>
+        </div>
       </div>
     </section>
   );

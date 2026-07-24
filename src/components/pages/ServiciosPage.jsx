@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LuMapPin, LuBell, LuUsers, LuPawPrint,
   LuStethoscope, LuShield, LuChevronDown, LuArrowRight
 } from "react-icons/lu";
+import { auth } from "../../firebase";
 import "./ServiciosPage.css";
 
 const servicios = [
@@ -135,6 +136,15 @@ function ServicioCard({ s, index }) {
 }
 
 function ServiciosPage() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="sv-page">
 
@@ -197,11 +207,23 @@ function ServiciosPage() {
         transition={{ duration: 0.6 }}
       >
         <div className="container sv-cta__inner">
-          <h2>¿Listo para proteger a tu mascota?</h2>
-          <p>Únete a la comunidad PetSOS y accede a todos los servicios de forma gratuita.</p>
-          <motion.a href="/registro" className="sv-cta__btn" whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
-            Crear cuenta gratis
-          </motion.a>
+          {user ? (
+            <>
+              <h2>¡Ya eres parte de PetSOS!</h2>
+              <p>Gestiona a tus mascotas y accede a todos los servicios desde tu panel.</p>
+              <motion.a href="/panel" className="sv-cta__btn" whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
+                Ir a mi panel
+              </motion.a>
+            </>
+          ) : (
+            <>
+              <h2>¿Listo para proteger a tu mascota?</h2>
+              <p>Únete a la comunidad PetSOS y accede a todos los servicios de forma gratuita.</p>
+              <motion.a href="/registro" className="sv-cta__btn" whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.97 }}>
+                Crear cuenta gratis
+              </motion.a>
+            </>
+          )}
         </div>
       </motion.div>
 

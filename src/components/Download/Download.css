@@ -22,7 +22,7 @@
 }
 
 .download__image img {
-  width: 470px; /* Cambia a 500px si lo quieres aún más grande */
+  width: 620px;
   max-width: none;
   height: auto;
   display: block;
