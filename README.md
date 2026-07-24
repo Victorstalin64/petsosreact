@@ -193,26 +193,6 @@ El proyecto sigue una arquitectura basada en componentes de React, permitiendo:
 
 ---
 
-# 📸 Capturas
-
-Puedes agregar imágenes aquí.
-
-```
-docs/
-├── home.png
-├── dashboard.png
-├── chatbot.png
-└── reportes.png
-```
-
-Luego:
-
-```markdown
-## Inicio
-
-![Inicio](docs/home.png)
-
-## Dashboard
 
 ![Dashboard](docs/dashboard.png)
 ```
