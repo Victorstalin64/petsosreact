@@ -6,7 +6,7 @@ import { LuMapPin, LuSave, LuCircleAlert, LuSearch, LuImage } from "react-icons/
 import { reportarAnimalEncontrado } from "../../services/foundAnimalService";
 import { auth } from "../../firebase";
 import { subirImagen } from "../../services/storageService";
-import animalEncontradoImg from "../../assets/images/AnimalEncontrado.png";
+import animalEncontradoImg from "../../assets/images/AnimalEncontrado.webp";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Otro"];

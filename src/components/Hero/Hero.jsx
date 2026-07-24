@@ -1,5 +1,5 @@
 import "./Hero.css";
-import retriever from "../../assets/images/Retriever.png";
+import retriever from "../../assets/images/Retriever.webp";
 import { FaPaw, FaMapMarkedAlt, FaBell, FaUsers } from "react-icons/fa";
 
 function Hero() {
@@ -21,7 +21,13 @@ function Hero() {
         </div>
 
         <div className="hero__image">
-          <img src={retriever} alt="Perro Retriever" />
+          <img
+            src={retriever}
+            alt="Perro Retriever"
+            width="360"
+            height="360"
+            fetchpriority="high"
+          />
         </div>
 
       </div>

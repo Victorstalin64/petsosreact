@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { auth, googleProvider } from "../../firebase";
 import { FcGoogle } from "react-icons/fc";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import retrieverImg from "../../assets/images/Retriever.png";
+import retrieverImg from "../../assets/images/Retriever.webp";
 import "./Auth.css";
 
 function Register() {

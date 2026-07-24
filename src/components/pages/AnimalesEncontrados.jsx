@@ -39,20 +39,19 @@ function AnimalesEncontrados() {
     ? animales 
     : animales.filter(a => a.especie === filtroEspecie);
 
-  const handleContactar = async (animal) => {
-    try {
-      await actualizarReporte(animal.id, { notificado: true });
-      if (animal.telefonoReportador) {
-        toast.info("Abriendo marcador telefónico...");
-        window.open(`tel:${animal.telefonoReportador}`, "_self");
-      } else {
-        toast.warning("No hay número de contacto disponible");
-      }
-    } catch (err) {
-      console.error("Error al procesar contacto:", err);
-      toast.error(err.message || "Error al procesar");
-    }
-  };
+  const handleContactar = (animal) => {
+  if (!animal.telefonoReportador) {
+    toast.warning("No hay número de contacto disponible");
+    return;
+  }
+
+  toast.info("Abriendo marcador telefónico...");
+  window.open(`tel:${animal.telefonoReportador}`, "_self");
+
+  actualizarReporte(animal.id, { notificado: true }).catch((err) => {
+    console.error("Error al marcar reporte como notificado:", err);
+  });
+};
 
   const formatDate = (timestamp) => {
     if (!timestamp) return "Fecha no disponible";

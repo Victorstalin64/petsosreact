@@ -1,9 +1,9 @@
 import "./Gallery.css";
 
-import busqueda from "../../assets/images/Busqueda.jpg";
-import mapa from "../../assets/images/Mapa.jpg";
+import busqueda from "../../assets/images/Busqueda.webp";
+import mapa from "../../assets/images/Mapa.webp";
 import alarma from "../../assets/images/Alarma.webp";
-import comunidad from "../../assets/images/Comunidad.jpeg";
+import comunidad from "../../assets/images/Comunidad.webp";
 
 function Gallery() {
   return (
@@ -16,19 +16,19 @@ function Gallery() {
         <div className="gallery__grid">
 
           <div className="gallery__item">
-            <img src={busqueda} alt="" />
+            <img src={busqueda} alt="" width="360" height="480" loading="lazy" />
           </div>
 
           <div className="gallery__item">
-            <img src={mapa} alt="" />
+            <img src={mapa} alt="" width="225" height="225" loading="lazy" />
           </div>
 
           <div className="gallery__item">
-            <img src={alarma} alt="" />
+            <img src={alarma} alt="" width="500" height="500" loading="lazy" />
           </div>
 
           <div className="gallery__item">
-            <img src={comunidad} alt="" />
+            <img src={comunidad} alt="" width="1200" height="675" loading="lazy" />
           </div>
 
         </div>

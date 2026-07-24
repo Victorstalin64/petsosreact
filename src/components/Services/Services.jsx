@@ -1,8 +1,8 @@
 import "./Services.css";
 
-import service1 from "../../assets/images/IconoService1.png";
-import service2 from "../../assets/images/Localizacion.png";
-import service3 from "../../assets/images/IconoService2.png";
+import service1 from "../../assets/images/IconoService1.webp";
+import service2 from "../../assets/images/Localizacion.webp";
+import service3 from "../../assets/images/IconoService2.webp";
 
 function Services() {
   return (

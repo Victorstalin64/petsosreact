@@ -6,7 +6,7 @@ import { LuPawPrint, LuSave, LuCircleAlert, LuImage } from "react-icons/lu";
 import { registrarMascota } from "../../services/petService";
 import { subirImagen } from "../../services/storageService";
 import { auth } from "../../firebase";
-import mascotaRegistroImg from "../../assets/images/RegistrarMascota.png";
+import mascotaRegistroImg from "../../assets/images/RegistrarMascota.webp";
 import "./Pages.css";
 
 const especies = ["Perro", "Gato", "Ave", "Conejo", "Hamster", "Otro"];

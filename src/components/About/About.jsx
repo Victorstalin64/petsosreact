@@ -1,5 +1,5 @@
 import "./About.css";
-import abandono from "../../assets/images/abandono.jpg";
+import abandono from "../../assets/images/abandono.webp";
 
 function About() {
   return (
@@ -21,7 +21,7 @@ function About() {
         </div>
 
         <div className="about__image">
-          <img src={abandono} alt="Cuidado animal" />
+          <img src={abandono} alt="Cuidado animal" width="825" height="510" loading="lazy" />
         </div>
 
       </div>
